@@ -1,12 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
 
 # Configuración y credenciales de la base de datos
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:duoc@localhost/elmirador'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
 
 db = SQLAlchemy(app)
 
@@ -203,7 +205,7 @@ def marcar_como_pagado():
     }), 200
 
 
-@app.route('/listar_gastos_pendientes', methods=['GET'])
+@app.route('/listar_gastos_pendientes', methods=['POST'])
 def listar_gastos_pendientes():
     """
     Listar los gastos comunes pendientes de pago desde enero hasta el mes en curso del año indicado.
@@ -250,7 +252,7 @@ def listar_gastos_pendientes():
             'Atrasado': gasto.atrasado
         })
 
-    return jsonify({'gastos_pendientes': lista_gastos}), 200
+    return jsonify({'gastos_pendientes': lista_gastos}), 200    
 
 
 
